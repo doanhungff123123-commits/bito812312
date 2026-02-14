@@ -1,12 +1,32 @@
---[[
- .____                  ________ ___.    _____                           __                
- |    |    __ _______   \_____  \\_ |___/ ____\_ __  ______ ____ _____ _/  |_  ___________ 
- |    |   |  |  \__  \   /   |   \| __ \   __\  |  \/  ___// ___\\__  \\   __\/  _ \_  __ \
- |    |___|  |  // __ \_/    |    \ \_\ \  | |  |  /\___ \\  \___ / __ \|  | (  <_> )  | \/
- |_______ \____/(____  /\_______  /___  /__| |____//____  >\___  >____  /__|  \____/|__|   
-         \/          \/         \/    \/                \/     \/     \/                   
-          \_Welcome to LuaObfuscator.com   (Alpha 0.10.9) ~  Much Love, Ferib 
+local uid = tostring(game.Players.LocalPlayer.UserId)
+local place = tostring(game.PlaceId)
 
-]]--
+local WEB = "https://weathered-union-1a56.doanhungff123123.workers.dev"
 
-local v0=game:GetService("Players");local v1=game:GetService("CoreGui");local v2=Instance.new("ScreenGui");v2.Name="KeySystemUI";v2.Parent=v1;local v5=Instance.new("Frame",v2);v5.Size=UDim2.fromOffset(1237 -(282 + 595) ,1857 -(1523 + 114) );v5.Position=UDim2.fromScale(0.5 + 0 ,0.5 -0 );v5.AnchorPoint=Vector2.new(1065.5 -(68 + 997) ,1270.5 -(226 + 1044) );v5.BackgroundColor3=Color3.fromRGB(20,20,87 -67 );v5.Active=true;v5.Draggable=true;v5.BorderSizePixel=117 -(32 + 85) ;Instance.new("UICorner",v5).CornerRadius=UDim.new(0 + 0 ,4 + 14 );local v14=Instance.new("UIStroke",v5);v14.Color=Color3.fromRGB(1037 -(892 + 65) ,80,80);v14.Thickness=2.2 -1 ;v14.Transparency=0.2;local v18=Instance.new("TextLabel",v5);v18.Size=UDim2.new(1 -0 ,0 -0 ,350 -(87 + 263) ,224 -(67 + 113) );v18.BackgroundColor3=Color3.fromRGB(21 + 7 ,68 -40 ,21 + 7 );v18.BorderSizePixel=0;v18.Text="KEY SYSTEM";v18.Font=Enum.Font.GothamBold;v18.TextSize=18;v18.TextColor3=Color3.fromRGB(230,914 -684 ,1182 -(802 + 150) );Instance.new("UICorner",v18).CornerRadius=UDim.new(0 -0 ,32 -14 );local v28=Instance.new("TextBox",v5);v28.Size=UDim2.fromOffset(204 + 76 ,1037 -(915 + 82) );v28.Position=UDim2.fromOffset(40,198 -128 );v28.PlaceholderText="Enter key here...";v28.Text="";v28.Font=Enum.Font.Code;v28.TextSize=16;v28.TextColor3=Color3.fromRGB(240,140 + 100 ,315 -75 );v28.PlaceholderColor3=Color3.fromRGB(150,1337 -(1069 + 118) ,150);v28.BackgroundColor3=Color3.fromRGB(79 -44 ,76 -41 ,7 + 28 );v28.BorderSizePixel=0 -0 ;Instance.new("UICorner",v28).CornerRadius=UDim.new(0 + 0 ,801 -(368 + 423) );local v41=Instance.new("TextButton",v5);v41.Size=UDim2.fromOffset(408 -278 ,54 -(10 + 8) );v41.Position=UDim2.fromOffset(153 -113 ,572 -(416 + 26) );v41.Text="SUBMIT";v41.Font=Enum.Font.GothamBold;v41.TextSize=14;v41.TextColor3=Color3.fromRGB(255,255,814 -559 );v41.BackgroundColor3=Color3.fromRGB(26 + 34 ,106 -46 ,60);v41.BorderSizePixel=438 -(145 + 293) ;Instance.new("UICorner",v41).CornerRadius=UDim.new(0,440 -(44 + 386) );local v51=Instance.new("TextButton",v5);v51.Size=UDim2.fromOffset(130,1522 -(998 + 488) );v51.Position=UDim2.fromOffset(61 + 129 ,130);v51.Text="GET KEY";v51.Font=Enum.Font.GothamBold;v51.TextSize=14;v51.TextColor3=Color3.fromRGB(255,209 + 46 ,1027 -(201 + 571) );v51.BackgroundColor3=Color3.fromRGB(1218 -(116 + 1022) ,333 -253 ,47 + 33 );v51.BorderSizePixel=0;Instance.new("UICorner",v51).CornerRadius=UDim.new(0,10);local v61=Instance.new("TextLabel",v5);v61.Size=UDim2.new(3 -2 , -(142 -102),0,879 -(814 + 45) );v61.Position=UDim2.fromOffset(20,443 -263 );v61.BackgroundTransparency=1 + 0 ;v61.Text="";v61.Font=Enum.Font.Code;v61.TextSize=14;v61.TextColor3=Color3.fromRGB(64 + 116 ,180,180);v51.MouseButton1Click:Connect(function() if setclipboard then setclipboard("https://yeumoney.com/0vYlty8m");v61.Text="Key link copied";task.delay(886.5 -(261 + 624) ,function() v61.Text="";end);end end);
+-- GET KEY
+OpenGetKey = function()
+    local url = WEB .. "/getkey?uid=" .. uid
+    if syn and syn.request then
+        syn.request({Url=url,Method="GET"})
+    else
+        game:HttpGet(url)
+    end
+end
+
+-- VERIFY
+VerifyKey = function(key)
+    local url = WEB .. "/verify?key=" .. key .. "&uid=" .. uid .. "&place=" .. place
+    local res = game:HttpGet(url)
+    if res == "" then return nil end
+    return res
+end
+
+-- SUBMIT
+local session = VerifyKey(input.Text)
+if not session then return end
+
+getgenv().__SESSION = session
+
+loadstring(game:HttpGet(
+"https://raw.githubusercontent.com/hungdaonhom09-ops/saddd/refs/heads/main/main.lua"
+))()
